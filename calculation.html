@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculation Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .pulse-correct {
+            animation: pulseGreen 0.6s ease-in-out;
+        }
+
+        .pulse-incorrect {
+            animation: pulseRed 0.6s ease-in-out;
+        }
+
+        @keyframes pulseGreen {
+            0% {
+                background-color: rgb(34, 197, 94);
+                transform: scale(1);
+            }
+
+            50% {
+                background-color: rgb(22, 163, 74);
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: rgb(34, 197, 94);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseRed {
+            0% {
+                background-color: rgb(239, 68, 68);
+                transform: scale(1);
+            }
+
+            50% {
+                background-color: rgb(220, 38, 38);
+                transform: scale(1.05);
+            }
+
+            100% {
+                background-color: rgb(239, 68, 68);
+                transform: scale(1);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-800 mb-2">🧮 Calculation Game</h1>
+            <p class="text-gray-600">Test your math skills and beat your high score!</p>
+        </div>
+
+        <!-- Game Stats -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
+            <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                    <div class="text-2xl font-bold text-blue-600" id="currentScore">0</div>
+                    <div class="text-sm text-gray-500">Current Score</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-green-600" id="streak">0</div>
+                    <div class="text-sm text-gray-500">Streak</div>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-purple-600" id="highScore">0</div>
+                    <div class="text-sm text-gray-500">High Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="bg-white rounded-xl shadow-lg p-8 mb-6">
+            <!-- Welcome Screen -->
+            <div id="welcomeScreen" class="text-center">
+                <div class="text-6xl mb-4">🎯</div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Choose Your Mode</h2>
+                <p class="text-gray-600 mb-6">All problems require carry-over or borrowing - perfect for mental math
+                    practice!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4 hover:bg-red-100 transition-colors cursor-pointer"
+                        onclick="startGame('speed')">
+                        <div class="text-3xl mb-2">⚡</div>
+                        <h3 class="font-semibold text-red-700 mb-2">Speed Mode</h3>
+                        <p class="text-sm text-red-600">30 seconds<br>Beat the clock!</p>
+                    </div>
+
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition-colors cursor-pointer"
+                        onclick="startGame('classic')">
+                        <div class="text-3xl mb-2">🎯</div>
+                        <h3 class="font-semibold text-blue-700 mb-2">Classic Mode</h3>
+                        <p class="text-sm text-blue-600">10 questions<br>No time pressure</p>
+                    </div>
+
+                    <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4 hover:bg-green-100 transition-colors cursor-pointer"
+                        onclick="showTrainingModes()">
+                        <div class="text-3xl mb-2">📚</div>
+                        <h3 class="font-semibold text-green-700 mb-2">Training Mode</h3>
+                        <p class="text-sm text-green-600">Practice specific<br>operations!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Training Mode Selection -->
+            <div id="trainingScreen" class="hidden text-center">
+                <div class="text-6xl mb-6">📚</div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Choose Training Mode</h2>
+                <p class="text-gray-600 mb-8">Practice specific operations or mix them all together!</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 hover:bg-blue-100 transition-colors cursor-pointer"
+                        onclick="startGame('addition')">
+                        <div class="text-3xl mb-2">➕</div>
+                        <h3 class="font-semibold text-blue-700 mb-2">Addition Only</h3>
+                        <p class="text-sm text-blue-600">Practice carry-over addition</p>
+                    </div>
+
+                    <div class="bg-red-50 border-2 border-red-200 rounded-lg p-4 hover:bg-red-100 transition-colors cursor-pointer"
+                        onclick="startGame('subtraction')">
+                        <div class="text-3xl mb-2">➖</div>
+                        <h3 class="font-semibold text-red-700 mb-2">Subtraction Only</h3>
+                        <p class="text-sm text-red-600">Practice borrowing subtraction</p>
+                    </div>
+
+                    <div class="bg-purple-50 border-2 border-purple-200 rounded-lg p-4 hover:bg-purple-100 transition-colors cursor-pointer"
+                        onclick="startGame('multiplication')">
+                        <div class="text-3xl mb-2">✖️</div>
+                        <h3 class="font-semibold text-purple-700 mb-2">Multiplication Only</h3>
+                        <p class="text-sm text-purple-600">Practice multi-digit multiplication</p>
+                    </div>
+
+                    <div class="bg-orange-50 border-2 border-orange-200 rounded-lg p-4 hover:bg-orange-100 transition-colors cursor-pointer"
+                        onclick="startGame('division')">
+                        <div class="text-3xl mb-2">➗</div>
+                        <h3 class="font-semibold text-orange-700 mb-2">Division Only</h3>
+                        <p class="text-sm text-orange-600">Practice clean division</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-200 rounded-lg p-6 hover:from-green-100 hover:to-blue-100 transition-colors cursor-pointer"
+                    onclick="startGame('infinite')">
+                    <div class="text-4xl mb-3">♾️</div>
+                    <h3 class="font-semibold text-green-700 mb-3">Mixed Practice</h3>
+                    <p class="text-sm text-green-600">All operations mixed together - the ultimate challenge!</p>
+                </div>
+
+                <div class="mt-8 grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <button onclick="backToMainMenu()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200">
+                        ← Back to Main Menu
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Screen -->
+            <div id="gameScreen" class="hidden text-center">
+                <div id="timerDisplay" class="hidden mb-4">
+                    <div class="text-2xl font-bold text-red-600" id="timeLeft">30</div>
+                    <div class="text-sm text-gray-500">seconds left</div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-4xl font-bold text-gray-800 mb-4" id="question">10 + 5 = ?</div>
+                    <input type="number" id="answerInput"
+                        class="text-2xl text-center border-2 border-gray-300 rounded-lg py-3 px-4 w-48 focus:border-blue-500 focus:outline-none"
+                        placeholder="Your answer" step="0.01">
+                </div>
+
+                <div class="space-x-4 mb-6">
+                    <button onclick="submitAnswer()" id="submitBtn"
+                        class="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                        Submit Answer
+                    </button>
+                    <button onclick="skipQuestion()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                        Skip
+                    </button>
+                    <button onclick="endGame()" id="quitBtn"
+                        class="hidden bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                        Quit Game
+                    </button>
+                </div>
+
+                <div id="feedback" class="text-lg font-medium h-6"></div>
+            </div>
+
+            <!-- Game Over Screen -->
+            <div id="gameOverScreen" class="hidden text-center">
+                <div class="text-6xl mb-4">🏆</div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Game Complete!</h2>
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <div class="text-3xl font-bold text-blue-600 mb-2" id="finalScore">0</div>
+                    <div class="text-gray-600 mb-4">Final Score</div>
+                    <div class="text-lg text-gray-700" id="gameStats"></div>
+                </div>
+                <div class="space-x-4">
+                    <button onclick="startGame()"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                        Play Again
+                    </button>
+                    <button onclick="resetGame()"
+                        class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200">
+                        Main Menu
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">How to Play</h3>
+            <ul class="text-gray-600 space-y-2">
+                <li>• <strong>Speed Mode:</strong> 30 seconds to solve as many mixed problems as possible</li>
+                <li>• <strong>Classic Mode:</strong> 10 mixed questions with no time pressure</li>
+                <li>• <strong>Training Mode:</strong> Practice specific operations or mix them all</li>
+                <li>• Addition/Subtraction: Problems requiring carry-over or borrowing</li>
+                <li>• Multiplication: Two-digit × single-digit (like 47 × 6)</li>
+                <li>• Division: Always results in whole numbers (like 168 ÷ 7)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let currentScore = 0;
+        let streak = 0;
+        let highScore = localStorage.getItem('calcGameHighScore') || 0;
+        let currentQuestion = {};
+        let questionsAnswered = 0;
+        let correctAnswers = 0;
+        let gameActive = false;
+        let gameMode = 'classic';
+        let timeLeft = 30;
+        let timer = null;
+
+        // Update high score display on load
+        document.getElementById('highScore').textContent = highScore;
+
+        function generateQuestion() {
+            let operations;
+
+            // Determine which operations to use based on game mode
+            if (gameMode === 'addition') {
+                operations = ['+'];
+            } else if (gameMode === 'subtraction') {
+                operations = ['-'];
+            } else if (gameMode === 'multiplication') {
+                operations = ['*'];
+            } else if (gameMode === 'division') {
+                operations = ['/'];
+            } else {
+                // For speed, classic, and infinite modes - use all operations
+                operations = ['+', '-', '*', '/'];
+            }
+
+            const operation = operations[Math.floor(Math.random() * operations.length)];
+
+            let num1, num2;
+
+            if (operation === '+') {
+                // Addition that requires carry-over
+                // Generate numbers where at least one digit position requires carrying
+                do {
+                    num1 = Math.floor(Math.random() * 89) + 10; // 10-98
+                    num2 = Math.floor(Math.random() * 89) + 10; // 10-98
+                } while (!requiresCarryOver(num1, num2, '+'));
+
+            } else if (operation === '-') {
+                // Subtraction that requires borrowing
+                do {
+                    num1 = Math.floor(Math.random() * 89) + 20; // 20-108 (larger first number)
+                    num2 = Math.floor(Math.random() * 79) + 10; // 10-88
+                } while (!requiresCarryOver(num1, num2, '-') || num1 <= num2);
+
+            } else if (operation === '*') {
+                // Multiplication: two-digit × one-digit (requires carrying)
+                num1 = Math.floor(Math.random() * 90) + 10; // 10-99
+                num2 = Math.floor(Math.random() * 8) + 2; // 2-9
+
+            } else if (operation === '/') {
+                // Division: ensure clean division with two-digit results
+                num2 = Math.floor(Math.random() * 8) + 2; // 2-9
+                let quotient = Math.floor(Math.random() * 90) + 10; // 10-99
+                num1 = num2 * quotient; // This ensures clean division
+            }
+
+            let correctAnswer;
+            switch (operation) {
+                case '+':
+                    correctAnswer = num1 + num2;
+                    break;
+                case '-':
+                    correctAnswer = num1 - num2;
+                    break;
+                case '*':
+                    correctAnswer = num1 * num2;
+                    break;
+                case '/':
+                    correctAnswer = num1 / num2;
+                    break;
+            }
+
+            return {
+                num1: num1,
+                num2: num2,
+                operation: operation,
+                correctAnswer: correctAnswer,
+                questionText: `${num1} ${operation} ${num2} = ?`
+            };
+        }
+
+        function requiresCarryOver(num1, num2, operation) {
+            if (operation === '+') {
+                // Check if any digit position requires carrying
+                let ones1 = num1 % 10;
+                let ones2 = num2 % 10;
+                let tens1 = Math.floor(num1 / 10) % 10;
+                let tens2 = Math.floor(num2 / 10) % 10;
+
+                return (ones1 + ones2 >= 10) || (tens1 + tens2 >= 10);
+            } else if (operation === '-') {
+                // Check if any digit position requires borrowing
+                let ones1 = num1 % 10;
+                let ones2 = num2 % 10;
+                let tens1 = Math.floor(num1 / 10) % 10;
+                let tens2 = Math.floor(num2 / 10) % 10;
+
+                return (ones1 < ones2) || (tens1 < tens2);
+            }
+            return false;
+        }
+
+        function startGame(mode = 'classic') {
+            gameActive = true;
+            gameMode = mode;
+            questionsAnswered = 0;
+            correctAnswers = 0;
+
+            // Clear any existing timer
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            // Setup timer for speed mode
+            if (gameMode === 'speed') {
+                timeLeft = 30;
+                document.getElementById('timerDisplay').classList.remove('hidden');
+                document.getElementById('timeLeft').textContent = timeLeft;
+                startTimer();
+            } else {
+                document.getElementById('timerDisplay').classList.add('hidden');
+            }
+
+            // Show quit button for all modes
+            document.getElementById('quitBtn').classList.remove('hidden');
+
+            nextQuestion();
+            document.getElementById('answerInput').focus();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timeLeft').textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function nextQuestion() {
+            if (!gameActive) return;
+
+            currentQuestion = generateQuestion();
+            document.getElementById('question').textContent = currentQuestion.questionText;
+            document.getElementById('answerInput').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('answerInput').focus();
+
+            // Add fade-in animation
+            document.getElementById('question').classList.add('fade-in');
+            setTimeout(() => {
+                document.getElementById('question').classList.remove('fade-in');
+            }, 500);
+        }
+
+        function submitAnswer() {
+            if (!gameActive) return;
+
+            const userAnswer = parseFloat(document.getElementById('answerInput').value);
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (isNaN(userAnswer)) {
+                showFeedback('Please enter a valid number!', 'text-red-600');
+                return;
+            }
+
+            questionsAnswered++;
+
+            // Check if answer is correct (allow small margin for floating point)
+            const isCorrect = Math.abs(userAnswer - currentQuestion.correctAnswer) < 0.01;
+
+            if (isCorrect) {
+                correctAnswers++;
+                currentScore++;
+                streak++;
+
+                // Update displays
+                document.getElementById('currentScore').textContent = currentScore;
+                document.getElementById('streak').textContent = streak;
+
+                // Check for new high score
+                if (currentScore > highScore) {
+                    highScore = currentScore;
+                    document.getElementById('highScore').textContent = highScore;
+                    localStorage.setItem('calcGameHighScore', highScore);
+                }
+
+                showFeedback('Correct! 🎉', 'text-green-600');
+                submitBtn.classList.add('pulse-correct');
+
+                setTimeout(() => {
+                    submitBtn.classList.remove('pulse-correct');
+                    nextQuestion();
+                }, 1000);
+
+            } else {
+                streak = 0;
+                document.getElementById('streak').textContent = streak;
+
+                const correctAnswer = currentQuestion.correctAnswer % 1 === 0 ?
+                    currentQuestion.correctAnswer :
+                    currentQuestion.correctAnswer.toFixed(2);
+
+                showFeedback(`Incorrect. The answer was ${correctAnswer}`, 'text-red-600');
+                submitBtn.classList.add('pulse-incorrect');
+
+                setTimeout(() => {
+                    submitBtn.classList.remove('pulse-incorrect');
+                    nextQuestion();
+                }, 1500);
+            }
+
+            // End game conditions based on mode
+            if (gameMode === 'classic' && questionsAnswered >= 10) {
+                setTimeout(() => {
+                    endGame();
+                }, isCorrect ? 1000 : 1500);
+            } else if (gameMode === 'infinite') {
+                // Continue indefinitely - no end condition
+            }
+        }
+
+        function skipQuestion() {
+            if (!gameActive) return;
+
+            questionsAnswered++;
+            streak = 0;
+            document.getElementById('streak').textContent = streak;
+
+            showFeedback('Question skipped', 'text-yellow-600');
+
+            if (gameMode === 'classic' && questionsAnswered >= 10) {
+                setTimeout(() => {
+                    endGame();
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    nextQuestion();
+                }, 1000);
+            }
+        }
+
+        function endGame() {
+            gameActive = false;
+
+            // Clear timer if running
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+            }
+
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+
+            document.getElementById('finalScore').textContent = currentScore;
+
+            const accuracy = questionsAnswered > 0 ? Math.round((correctAnswers / questionsAnswered) * 100) : 0;
+            let modeText = '';
+            if (gameMode === 'speed') modeText = 'Speed Mode - ';
+            else if (gameMode === 'infinite') modeText = 'Infinite Mode - ';
+            else modeText = 'Classic Mode - ';
+
+            document.getElementById('gameStats').innerHTML = `
+                ${modeText}You answered ${correctAnswers} out of ${questionsAnswered} questions correctly<br>
+                Accuracy: ${accuracy}%
+            `;
+        }
+
+        function resetGame() {
+            currentScore = 0;
+            streak = 0;
+            questionsAnswered = 0;
+            correctAnswers = 0;
+            gameActive = false;
+
+            document.getElementById('currentScore').textContent = currentScore;
+            document.getElementById('streak').textContent = streak;
+
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('trainingScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+        }
+
+        function showTrainingModes() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('trainingScreen').classList.remove('hidden');
+        }
+
+        function backToMainMenu() {
+            document.getElementById('trainingScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+        }
+
+        function showFeedback(message, className) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `text-lg font-medium h-6 ${className}`;
+        }
+
+        // Allow Enter key to submit answer
+        document.getElementById('answerInput').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Prevent form submission
+                if (gameActive) {
+                    submitAnswer();
+                }
+            }
+        });
+    </script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'96e99a49723f45b8',t:'MTc1NTEwMjY4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
