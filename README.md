@@ -11,4 +11,4 @@ You can choose between:
 
 The problems include addition, subtraction, multiplication, and division — all designed to make you think a bit (carry-over, borrowing, and so on). Great for quick brain training or just to beat your own high score!
 
-<img width="512" height="384" alt="Untitled23_20250817202042" src="https://github.com/user-attachments/assets/b2dc4f06-b890-4b70-96b9-2b2108ebab4f" />
+  <img width="512" height="384" alt="Untitled23_20250817202042" src="https://github.com/user-attachments/assets/b2dc4f06-b890-4b70-96b9-2b2108ebab4f" />
