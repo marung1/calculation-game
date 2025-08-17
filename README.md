@@ -1,3 +1,5 @@
+**🧮Calculation game!**
+
 A fun little math game to test your mental calculation skills!
 You can choose between:
 
