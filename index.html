@@ -204,7 +204,7 @@
                         onclick="startGame('speed')">
                         <div class="text-3xl mb-2">⚡</div>
                         <h3 class="font-semibold text-red-700 dark:text-red-300 mb-2">Speed Mode</h3>
-                        <p class="text-sm text-red-600 dark:text-red-400">20-60 seconds<br>Beat the clock!</p>
+                        <p class="text-sm text-red-600 dark:text-red-400">30 seconds<br>Beat the clock!</p>
                     </div>
 
                     <div class="bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-200 dark:border-blue-700 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors cursor-pointer"
@@ -334,7 +334,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border dark:border-gray-700">
             <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-3">How to Play</h3>
             <ul class="text-gray-600 dark:text-gray-300 space-y-2">
-                <li>• <strong>Speed Mode:</strong> 20-60 seconds to solve as many mixed problems as possible</li>
+                <li>• <strong>Speed Mode:</strong> 30 seconds to solve as many mixed problems as possible</li>
                 <li>• <strong>Classic Mode:</strong> 10 mixed questions with no time pressure</li>
                 <li>• <strong>Training Mode:</strong> Practice specific operations or mix them all</li>
                 <li>• Addition/Subtraction: Problems requiring carry-over or borrowing</li>
@@ -359,9 +359,7 @@
         // Settings
         let settings = {
             theme: localStorage.getItem('calcGameTheme') || 'light',
-            soundEnabled: localStorage.getItem('calcGameSound') === 'true',
             autoFocus: localStorage.getItem('calcGameAutoFocus') !== 'false',
-            hintsEnabled: localStorage.getItem('calcGameHints') === 'true',
             speedTimer: parseInt(localStorage.getItem('calcGameSpeedTimer')) || 30
         };
 
@@ -375,9 +373,7 @@
 
             // Set form values
             document.querySelector(`input[name="theme"][value="${settings.theme}"]`).checked = true;
-            document.getElementById('soundToggle').checked = settings.soundEnabled;
             document.getElementById('autoFocusToggle').checked = settings.autoFocus;
-            document.getElementById('hintsToggle').checked = settings.hintsEnabled;
             document.querySelector(`input[name="timer"][value="${settings.speedTimer}"]`).checked = true;
         }
 
@@ -408,19 +404,9 @@
             applyTheme(theme);
         }
 
-        function toggleSound() {
-            settings.soundEnabled = document.getElementById('soundToggle').checked;
-            localStorage.setItem('calcGameSound', settings.soundEnabled);
-        }
-
         function toggleAutoFocus() {
             settings.autoFocus = document.getElementById('autoFocusToggle').checked;
             localStorage.setItem('calcGameAutoFocus', settings.autoFocus);
-        }
-
-        function toggleHints() {
-            settings.hintsEnabled = document.getElementById('hintsToggle').checked;
-            localStorage.setItem('calcGameHints', settings.hintsEnabled);
         }
 
         function setTimer(seconds) {
@@ -780,7 +766,7 @@
             }
         });
     </script>
-    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'97095206a77e3e68',t:'MTc1NTQzNTI3MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'973fdc56d5fcce9b',t:'MTc1NjAwNzE2Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
 </body>
 
 </html>
