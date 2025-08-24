@@ -14,3 +14,5 @@ The problems include addition, subtraction, multiplication, and division — all
 <p align="center">
   <img width="512" height="384" alt="Untitled23_20250817202042" src="https://github.com/user-attachments/assets/b2dc4f06-b890-4b70-96b9-2b2108ebab4f" />
 </p>
+
+<p align="center">(I just made for my own use)</p>
