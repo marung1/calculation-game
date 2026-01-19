@@ -1,6 +1,6 @@
 ## 🧮Calculation game!
 
-A fun little math game to test your mental calculation skills!
+A fun little math game to test your mental calculation skills.
 You can choose between:
 
 ⚡ Speed Mode – Solve as many problems as you can in the time limit
@@ -9,10 +9,8 @@ You can choose between:
 
 📘 Training Mode – Focus on specific operations and practice
 
-The problems include addition, subtraction, multiplication, and division — all designed to make you think a bit (carry-over, borrowing, and so on). Great for quick brain training or just to beat your own high score!
+The problems include addition, subtraction, multiplication, and division. This game is designed to make you think a bit (carry-over, borrowing, and so on). It's great for quick brain training or just to beat your own high score.
 
 <p align="center">
   <img width="512" height="384" alt="Untitled23_20250817202042" src="https://github.com/user-attachments/assets/b2dc4f06-b890-4b70-96b9-2b2108ebab4f" />
 </p>
-
-<p align="center">(I just made for my own use)</p>
